@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Workshop1.Models.Enrollment>
+
+@{
+    ViewData["Title"] = "Enrollments";
+}
+
+<h1>Enrollments</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-success">Create New</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Course</th>
+            <th>Student</th>
+            <th>Semester</th>
+            <th>Year</th>
+            <th>Grade</th>
+            <th>Exam</th>
+            <th>Seminar</th>
+            <th>Project</th>
+            <th>Additional</th>
+            <th>Finish date</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@(item.Course != null ? item.Course.Title : "-")</td>
+                <td>@(item.Student != null ? item.Student.FirstName + " " + item.Student.LastName + " (" + item.Student.StudentId + ")" : "-")</td>
+
+                <td>@item.Semester</td>
+                <td>@item.Year</td>
+                <td>@item.Grade</td>
+
+                <td>@item.ExamPoints</td>
+                <td>@item.SeminarPoints</td>
+                <td>@item.ProjectPoints</td>
+                <td>@item.AdditionalPoints</td>
+
+                <td>@item.FinishDate?.ToString("yyyy-MM-dd")</td>
+
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

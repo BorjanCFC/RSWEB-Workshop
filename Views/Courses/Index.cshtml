@@ -1,0 +1,74 @@
+﻿@model IEnumerable<Workshop1.Models.Course>
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+@{
+    ViewData["Title"] = "Courses";
+}
+
+<h1>Courses</h1>
+
+<form asp-action="Index" method="get" class="mb-3">
+    <div class="row g-2">
+        <div class="col-md-4">
+            <label class="form-label">Title</label>
+            <input type="text" name="title" value="@Context.Request.Query["title"]" class="form-control" />
+        </div>
+
+        <div class="col-md-2">
+            <label class="form-label">Semester</label>
+            <input type="number" name="semester" value="@Context.Request.Query["semester"]" class="form-control" min="1" />
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Programme</label>
+            <input type="text" name="programme" value="@Context.Request.Query["programme"]" class="form-control" />
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Teacher</label>
+            <select name="teacherId" class="form-select" asp-items="(SelectList)ViewBag.Teachers">
+                <option value="">-- All teachers --</option>
+            </select>
+        </div>
+
+        <div class="col-12 mt-2">
+            <button type="submit" class="btn btn-primary">Filter</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Clear</a>
+            <a asp-action="Create" class="btn btn-success float-end">Create New</a>
+        </div>
+    </div>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Credits</th>
+            <th>Semester</th>
+            <th>Programme</th>
+            <th>Education level</th>
+            <th>First teacher</th>
+            <th>Second teacher</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Title</td>
+                <td>@item.Credits</td>
+                <td>@item.Semester</td>
+                <td>@item.Programme</td>
+                <td>@item.EducationLevel</td>
+                <td>@(item.FirstTeacher != null ? item.FirstTeacher.FullName : "-")</td>
+                <td>@(item.SecondTeacher != null ? item.SecondTeacher.FullName : "-")</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
