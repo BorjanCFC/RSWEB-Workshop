@@ -201,7 +201,7 @@ namespace Workshop1.Controllers
 
             await _context.SaveChangesAsync();
 
-            // 3) Update other fields in Enrollment (NOT FK)
+            // 3) Update other fields in Enrollment
             var rows = vm.EnrollmentRows ?? new List<EnrollmentEditRowVM>();
             var rowsByStudentId = rows.ToDictionary(r => r.StudentId, r => r);
 
