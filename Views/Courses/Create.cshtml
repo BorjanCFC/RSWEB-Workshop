@@ -1,61 +1,228 @@
 ﻿@model Workshop1.Models.Course
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Course";
 }
 
-<h1>Create</h1>
+<div class="container py-4">
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="display-6 fw-bold" style="color: var(--primary-color);">Create New Course</h1>
+            <p class="text-muted mb-0">Add a new course to the system</p>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Back to List
+        </a>
+    </div>
 
-<h4>Course</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+    <!-- Create Form Card -->
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white border-0 py-3">
+                    <h5 class="card-title mb-0 fw-semibold">
+                        <i class="fas fa-plus-circle me-2" style="color: var(--primary-color);"></i>
+                        Course Information
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger border-0 mb-4"></div>
+
+                        <div class="row g-3">
+                            <!-- Course Title -->
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label asp-for="Title" class="form-label fw-medium">
+                                        <i class="fas fa-book me-1" style="color: var(--primary-color);"></i>
+                                        Course Title *
+                                    </label>
+                                    <input asp-for="Title" class="form-control"
+                                           placeholder="Enter course title" />
+                                    <span asp-validation-for="Title" class="text-danger small mt-1"></span>
+                                </div>
+                            </div>
+
+                            <!-- Credits & Semester -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Credits" class="form-label fw-medium">
+                                        <i class="fas fa-star me-1" style="color: #f59e0b;"></i>
+                                        Credits *
+                                    </label>
+                                    <input asp-for="Credits" class="form-control"
+                                           placeholder="e.g., 3" />
+                                    <span asp-validation-for="Credits" class="text-danger small mt-1"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Semester" class="form-label fw-medium">
+                                        <i class="fas fa-calendar-alt me-1" style="color: var(--secondary-color);"></i>
+                                        Semester *
+                                    </label>
+                                    <input asp-for="Semester" class="form-control"
+                                           placeholder="e.g., 1" />
+                                    <span asp-validation-for="Semester" class="text-danger small mt-1"></span>
+                                </div>
+                            </div>
+
+                            <!-- Programme & Education Level -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Programme" class="form-label fw-medium">
+                                        <i class="fas fa-graduation-cap me-1" style="color: #9333ea;"></i>
+                                        Programme *
+                                    </label>
+                                    <input asp-for="Programme" class="form-control"
+                                           placeholder="e.g., Computer Science" />
+                                    <span asp-validation-for="Programme" class="text-danger small mt-1"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="EducationLevel" class="form-label fw-medium">
+                                        <i class="fas fa-university me-1" style="color: #3b82f6;"></i>
+                                        Education Level *
+                                    </label>
+                                    <input asp-for="EducationLevel" class="form-control"
+                                           placeholder="e.g., Undergraduate" />
+                                    <span asp-validation-for="EducationLevel" class="text-danger small mt-1"></span>
+                                </div>
+                            </div>
+
+                            <!-- First Teacher -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="FirstTeacherId" class="form-label fw-medium">
+                                        <i class="fas fa-chalkboard-teacher me-1" style="color: var(--primary-color);"></i>
+                                        First Teacher
+                                    </label>
+                                    <select asp-for="FirstTeacherId" class="form-select"
+                                            style="background-color: #f8f9fa; border: 1px solid #dee2e6;">
+                                        <option value="" class="text-muted">-- Select first teacher --</option>
+                                        @foreach (var teacher in ViewBag.FirstTeacherId as SelectList)
+                                        {
+                                            <option value="@teacher.Value">@teacher.Text</option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="FirstTeacherId" class="text-danger small mt-1"></span>
+                                </div>
+                            </div>
+
+                            <!-- Second Teacher -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="SecondTeacherId" class="form-label fw-medium">
+                                        <i class="fas fa-user-tie me-1" style="color: var(--secondary-color);"></i>
+                                        Second Teacher
+                                    </label>
+                                    <select asp-for="SecondTeacherId" class="form-select"
+                                            style="background-color: #f8f9fa; border: 1px solid #dee2e6;">
+                                        <option value="" class="text-muted">-- Select second teacher --</option>
+                                        @foreach (var teacher in ViewBag.SecondTeacherId as SelectList)
+                                        {
+                                            <option value="@teacher.Value">@teacher.Text</option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="SecondTeacherId" class="text-danger small mt-1"></span>
+                                </div>
+                            </div>
+
+                            <!-- Submit Buttons -->
+                            <div class="col-12 mt-4 pt-3 border-top">
+                                <div class="d-flex justify-content-center gap-3">
+                                    <button type="submit" class="btn btn-primary px-4 py-2">
+                                        <i class="fas fa-save me-2"></i>Create Course
+                                    </button>
+                                    <a asp-action="Index" class="btn btn-outline-secondary px-4 py-2">
+                                        <i class="fas fa-times me-1"></i>Cancel
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Credits" class="control-label"></label>
-                <input asp-for="Credits" class="form-control" />
-                <span asp-validation-for="Credits" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Semester" class="control-label"></label>
-                <input asp-for="Semester" class="form-control" />
-                <span asp-validation-for="Semester" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Programme" class="control-label"></label>
-                <input asp-for="Programme" class="form-control" />
-                <span asp-validation-for="Programme" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EducationLevel" class="control-label"></label>
-                <input asp-for="EducationLevel" class="form-control" />
-                <span asp-validation-for="EducationLevel" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FirstTeacherId" class="control-label"></label>
-                <select asp-for="FirstTeacherId" class ="form-control" asp-items="ViewBag.FirstTeacherId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="SecondTeacherId" class="control-label"></label>
-                <select asp-for="SecondTeacherId" class ="form-control" asp-items="ViewBag.SecondTeacherId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
+
+<style>
+    .card {
+        border-radius: 12px;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .card-header {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .form-control, .form-select {
+        border-radius: 8px;
+        border: 1px solid #dee2e6;
+        padding: 0.75rem 1rem;
+        transition: all 0.2s ease;
+    }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(79, 70, 229, 0.15);
+        }
+
+    .form-label {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border: none;
+        color: #fff !important;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.25s ease;
+    }
+
+        .btn-primary:hover,
+        .btn-primary:focus {
+            background-color: var(--primary-color);
+            filter: brightness(0.9);
+            color: #fff !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.25);
+        }
+
+
+    .btn-outline-secondary {
+        border-radius: 8px;
+        font-weight: 500;
+    }
+
+    @@media (max-width: 768px) {
+        .d-flex.justify-content-between.align-items-center {
+            flex-direction: column;
+            align-items: flex-start !important;
+            gap: 1rem;
+        }
+
+        .d-flex.gap-2 {
+            flex-direction: column;
+            gap: 0.5rem !important;
+        }
+
+        .btn {
+            width: 100%;
+        }
+    }
+</style>

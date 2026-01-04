@@ -1,76 +1,183 @@
 ﻿@model Workshop1.Models.Teacher
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Teacher";
 }
 
-<h1>Edit</h1>
-<h4>Teacher</h4>
-<hr />
+<div class="container py-4">
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="display-6 fw-bold" style="color: var(--primary-color);">Edit Teacher</h1>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Back to List
+        </a>
+    </div>
 
-<div class="row">
-    <div class="col-md-5">
-        <form asp-action="Edit" method="post" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="ProfileImagePath" />
-
-            <div class="form-group mb-2">
-                <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
-            </div>
-
-            <div class="form-group mb-2">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
-
-            <div class="form-group mb-2">
-                <label asp-for="Degree" class="control-label"></label>
-                <input asp-for="Degree" class="form-control" />
-                <span asp-validation-for="Degree" class="text-danger"></span>
-            </div>
-
-            <div class="form-group mb-2">
-                <label asp-for="AcademicRank" class="control-label"></label>
-                <input asp-for="AcademicRank" class="form-control" />
-                <span asp-validation-for="AcademicRank" class="text-danger"></span>
-            </div>
-
-            <div class="form-group mb-2">
-                <label asp-for="OfficeNumber" class="control-label"></label>
-                <input asp-for="OfficeNumber" class="form-control" />
-                <span asp-validation-for="OfficeNumber" class="text-danger"></span>
-            </div>
-
-            <div class="form-group mb-3">
-                <label asp-for="HireDate" class="control-label"></label>
-                <input asp-for="HireDate" class="form-control" />
-                <span asp-validation-for="HireDate" class="text-danger"></span>
-            </div>
-
-            <hr />
-            <h5>Profile image</h5>
-
-            @if (!string.IsNullOrWhiteSpace(Model.ProfileImagePath))
-            {
-                <div class="mb-2">
-                    <img src="@Model.ProfileImagePath" style="max-width:200px; border-radius:8px;" />
+    <!-- Edit Form Card -->
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white border-0 py-3">
+                    <h5 class="card-title mb-0 fw-semibold">
+                        <i class="fas fa-user-edit me-2" style="color: var(--primary-color);"></i>
+                        Teacher Information
+                    </h5>
                 </div>
-            }
+                <div class="card-body p-4">
+                    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger border-0 mb-4"></div>
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="ProfileImagePath" />
 
-            <div class="form-group mb-3">
-                <label asp-for="ProfileImage" class="control-label">Upload new image</label>
-                <input asp-for="ProfileImage" type="file" class="form-control" accept="image/*" />
-            </div>
+                        <div class="row g-3">
+                            <!-- First Name -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="FirstName" class="form-label fw-medium">
+                                        <i class="fas fa-user me-1" style="color: var(--primary-color);"></i>
+                                        First Name *
+                                    </label>
+                                    <input asp-for="FirstName" class="form-control"
+                                           placeholder="Enter first name" />
+                                    <span asp-validation-for="FirstName" class="text-danger small mt-1"></span>
+                                </div>
+                            </div>
 
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+                            <!-- Last Name -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="LastName" class="form-label fw-medium">
+                                        <i class="fas fa-user me-1" style="color: var(--primary-color);"></i>
+                                        Last Name *
+                                    </label>
+                                    <input asp-for="LastName" class="form-control"
+                                           placeholder="Enter last name" />
+                                    <span asp-validation-for="LastName" class="text-danger small mt-1"></span>
+                                </div>
+                            </div>
+
+                            <!-- Degree -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Degree" class="form-label fw-medium">
+                                        <i class="fas fa-graduation-cap me-1" style="color: var(--secondary-color);"></i>
+                                        Degree
+                                    </label>
+                                    <input asp-for="Degree" class="form-control"
+                                           placeholder="e.g., Ph.D., M.Sc." />
+                                    <span asp-validation-for="Degree" class="text-danger small mt-1"></span>
+                                </div>
+                            </div>
+
+                            <!-- Academic Rank -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="AcademicRank" class="form-label fw-medium">
+                                        <i class="fas fa-award me-1" style="color: #f59e0b;"></i>
+                                        Academic Rank
+                                    </label>
+                                    <input asp-for="AcademicRank" class="form-control"
+                                           placeholder="e.g., Professor, Assistant" />
+                                    <span asp-validation-for="AcademicRank" class="text-danger small mt-1"></span>
+                                </div>
+                            </div>
+
+                            <!-- Office Number -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="OfficeNumber" class="form-label fw-medium">
+                                        <i class="fas fa-door-open me-1" style="color: #9333ea;"></i>
+                                        Office Number
+                                    </label>
+                                    <input asp-for="OfficeNumber" class="form-control"
+                                           placeholder="e.g., A-101" />
+                                    <span asp-validation-for="OfficeNumber" class="text-danger small mt-1"></span>
+                                </div>
+                            </div>
+
+                            <!-- Hire Date -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="HireDate" class="form-label fw-medium">
+                                        <i class="fas fa-calendar-alt me-1" style="color: #3b82f6;"></i>
+                                        Hire Date *
+                                    </label>
+                                    <input asp-for="HireDate" class="form-control"
+                                           type="date" />
+                                    <span asp-validation-for="HireDate" class="text-danger small mt-1"></span>
+                                </div>
+                            </div>
+
+                            @if (User.IsInRole("Teacher"))
+                            {
+                                <!-- Profile Image Section -->
+                                <div class="col-12 mt-4">
+                                    <div class="border-top pt-4">
+                                        <h6 class="fw-semibold mb-3" style="color: var(--primary-color);">
+                                            <i class="fas fa-camera me-2"></i>
+                                            Profile Image
+                                        </h6>
+
+                                        <!-- Current Profile Image -->
+                                        @if (!string.IsNullOrWhiteSpace(Model.ProfileImagePath))
+                                        {
+                                            <div class="mb-4">
+                                                <div class="d-flex align-items-center mb-3">
+                                                    <div class="current-image-label me-3">
+                                                        <i class="fas fa-image me-2" style="color: var(--secondary-color);"></i>
+                                                        <span class="fw-medium">Current Profile Picture:</span>
+                                                    </div>
+                                                </div>
+                                                <div class="profile-image-container">
+                                                    <img src="@Model.ProfileImagePath" class="profile-image-preview rounded-3"
+                                                    style="max-width: 200px; border: 3px solid var(--primary-color);" />
+                                                </div>
+                                            </div>
+                                        }
+
+                                        <!-- Upload New Image -->
+                                        <div class="form-group">
+                                            <label asp-for="ProfileImage" class="form-label fw-medium">
+                                                <i class="fas fa-upload me-1" style="color: var(--secondary-color);"></i>
+                                                Upload New Image
+                                            </label>
+                                            <div class="file-upload">
+                                                <input asp-for="ProfileImage" type="file" class="file-upload-input" id="ProfileImage" accept="image/*" />
+                                                <label for="ProfileImage" class="file-upload-btn">
+                                                    <i class="fas fa-upload me-2"></i>Choose file
+                                                </label>
+                                                <span class="file-upload-text" id="fileNameText">No file chosen</span>
+                                            </div>
+
+
+                                            <small class="text-muted mt-1 d-block">
+                                                <i class="fas fa-info-circle me-1"></i>
+                                                Upload a new profile picture (JPG, PNG, GIF)
+                                            </small>
+                                            <span asp-validation-for="ProfileImage" class="text-danger small mt-1"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                            <!-- Submit Buttons -->
+                            <div class="col-12 mt-4 pt-3 border-top">
+                                <div class="d-flex justify-content-center gap-3">
+                                    <button type="submit" class="btn btn-primary px-4 py-2">
+                                        <i class="fas fa-save me-2"></i>Save Changes
+                                    </button>
+                                    <a asp-action="Index" class="btn btn-outline-secondary px-4 py-2">
+                                        <i class="fas fa-times me-1"></i>Cancel
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 
@@ -78,4 +185,187 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <script>
+        // Image preview functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.querySelector('input[type="file"]');
+            const imagePreview = document.querySelector('.profile-image-preview');
+
+            if (fileInput && imagePreview) {
+                fileInput.addEventListener('change', function() {
+                    const file = this.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+
+                        reader.addEventListener('load', function() {
+                            imagePreview.src = reader.result;
+                        });
+
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+
+            // Set default hire date to today if empty
+            const hireDateInput = document.querySelector('input[name="HireDate"]');
+            if (hireDateInput && !hireDateInput.value) {
+                const today = new Date().toISOString().split('T')[0];
+                hireDateInput.value = today;
+            }
+        });
+    </script>
 }
+
+<style>
+    .card {
+        border-radius: 12px;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .card-header {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .form-control {
+        border-radius: 8px;
+        border: 1px solid #dee2e6;
+        padding: 0.75rem 1rem;
+        transition: all 0.2s ease;
+    }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(79, 70, 229, 0.15);
+        }
+
+    .form-label {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border: none;
+        color: #fff !important;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.25s ease;
+    }
+
+        .btn-primary:hover,
+        .btn-primary:focus {
+            background-color: var(--primary-color);
+            filter: brightness(0.9);
+            color: #fff !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.25);
+        }
+
+    .btn-outline-secondary {
+        border-radius: 8px;
+        font-weight: 500;
+    }
+
+    /* Custom file upload (works everywhere) */
+    .file-upload {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        border: 2px solid #e1e5eb;
+        border-radius: 8px;
+        padding: 10px 12px;
+        background: #fff;
+    }
+
+    .file-upload-input {
+        display: none; /* hide real input */
+    }
+
+    .file-upload-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: #fff !important;
+        border-radius: 8px;
+        padding: 10px 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        white-space: nowrap;
+    }
+
+        .file-upload-btn:hover {
+            transform: translateY(-1px);
+            filter: brightness(0.95);
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.25);
+        }
+
+    .file-upload-text {
+        color: #555;
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 320px;
+    }
+
+    @@media (max-width: 768px) {
+        .file-upload
+
+    {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .file-upload-text {
+        max-width: 100%;
+        text-align: center;
+    }
+
+    .file-upload-btn {
+        width: 100%;
+    }
+
+    }
+
+    .profile-image-container {
+        position: relative;
+        display: inline-block;
+    }
+
+    .profile-image-preview {
+        transition: transform 0.3s ease;
+    }
+
+        .profile-image-preview:hover {
+            transform: scale(1.05);
+        }
+
+    .current-image-label {
+        display: flex;
+        align-items: center;
+    }
+
+    @@media (max-width: 768px) {
+        .d-flex.justify-content-between.align-items-center {
+            flex-direction: column;
+            align-items: flex-start !important;
+            gap: 1rem;
+        }
+
+        .d-flex.gap-2 {
+            flex-direction: column;
+            gap: 0.5rem !important;
+        }
+
+        .btn {
+            width: 100%;
+        }
+
+        .profile-image-preview {
+            max-width: 150px !important;
+        }
+    }
+</style>

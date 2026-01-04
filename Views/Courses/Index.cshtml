@@ -5,73 +5,347 @@
     ViewData["Title"] = "Courses";
 }
 
-<h1>Courses</h1>
-
-<p>
-    <a asp-action="Create" class="btn btn-success">Create New</a>
-</p>
-
-<form asp-action="Index" method="get" class="mb-3">
-    <div class="row g-2">
-        <div class="col-md-4">
-            <label class="form-label">Title</label>
-            <input type="text" name="title" value="@Context.Request.Query["title"]" class="form-control" />
+<div class="container py-4">
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="display-6 fw-bold" style="color: var(--primary-color);">Courses</h1>
         </div>
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="fas fa-plus-circle me-2"></i>Create New Course
+        </a>
+        }
+    </div>
 
-        <div class="col-md-2">
-            <label class="form-label">Semester</label>
-            <input type="number" name="semester" value="@Context.Request.Query["semester"]" class="form-control" min="1" />
-        </div>
+    <!-- Filter Card -->
+    @if (User.IsInRole("Admin"))
+        {
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body p-4">
+            <h5 class="card-title mb-3 fw-semibold">
+                <i class="fas fa-filter me-2" style="color: var(--primary-color);"></i>
+                Filter Courses
+            </h5>
 
-        <div class="col-md-3">
-            <label class="form-label">Programme</label>
-            <input type="text" name="programme" value="@Context.Request.Query["programme"]" class="form-control" />
-        </div>
+            <form asp-action="Index" method="get">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label fw-medium">Course Title</label>
+                        <input type="text" name="title" value="@Context.Request.Query["title"]"
+                               class="form-control" placeholder="Search by title..." />
+                    </div>
 
-        <div class="col-md-3">
-            <label class="form-label">Teacher</label>
-            <select name="teacherId" class="form-select" asp-items="(SelectList)ViewBag.Teachers">
-                <option value="">-- All teachers --</option>
-            </select>
-        </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-medium">Semester</label>
+                        <input type="number" name="semester" value="@Context.Request.Query["semester"]"
+                               class="form-control" min="1" placeholder="e.g., 1" />
+                    </div>
 
-        <div class="col-12 mt-2">
-            <button type="submit" class="btn btn-primary">Filter</button>
-            <a asp-action="Index" class="btn btn-outline-secondary">Clear</a>
+                    <div class="col-md-3">
+                        <label class="form-label fw-medium">Programme</label>
+                        <input type="text" name="programme" value="@Context.Request.Query["programme"]"
+                               class="form-control" placeholder="e.g., Computer Science" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-medium">Teacher</label>
+                        <select name="teacherId" class="form-select"
+                                style="background-color: #f8f9fa; border: 1px solid #dee2e6;">
+                            <option value="">-- All teachers --</option>
+                                @{
+                                    var teachersList = ViewBag.Teachers as SelectList ?? new SelectList(Enumerable.Empty<SelectListItem>());
+                                }
+                                @foreach (var teacher in teachersList)
+                                {
+                                    <option value="@teacher.Value"
+                                            selected="@(Context.Request.Query["teacherId"] == teacher.Value)">
+                                        @teacher.Text
+                                    </option>
+                                }
+                        </select>
+                    </div>
+
+                    <div class="col-12 mt-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search me-1"></i>Apply Filters
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="fas fa-times me-1"></i>Clear Filters
+                        </a>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
-</form>
+    }
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Credits</th>
-            <th>Semester</th>
-            <th>Programme</th>
-            <th>Education level</th>
-            <th>First teacher</th>
-            <th>Second teacher</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.Title</td>
-                <td>@item.Credits</td>
-                <td>@item.Semester</td>
-                <td>@item.Programme</td>
-                <td>@item.EducationLevel</td>
-                <td>@(item.FirstTeacher != null ? item.FirstTeacher.FullName : "-")</td>
-                <td>@(item.SecondTeacher != null ? item.SecondTeacher.FullName : "-")</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
+    <!-- Courses Table -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead style="background: linear-gradient(135deg, var(--primary-color), var(--primary-light)); color: white;">
+                        <tr>
+                            <th class="border-0" style="border-top-left-radius: 8px;">
+                                <i class="fas fa-book me-1"></i>Title
+                            </th>
+                            <th class="border-0">
+                                <i class="fas fa-star me-1"></i>Credits
+                            </th>
+                            <th class="border-0">
+                                <i class="fas fa-calendar-alt me-1"></i>Semester
+                            </th>
+                            <th class="border-0">
+                                <i class="fas fa-graduation-cap me-1"></i>Programme
+                            </th>
+                            <th class="border-0">
+                                <i class="fas fa-university me-1"></i>Level
+                            </th>
+                            <th class="border-0">
+                                <i class="fas fa-chalkboard-teacher me-1"></i>Teachers
+                            </th>
+                            <th class="border-0 text-end" style="border-top-right-radius: 8px;">
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.Any())
+                        {
+                            <tr>
+                                <td colspan="7" class="text-center py-4">
+                                    <i class="fas fa-book-open fa-2x text-muted mb-3"></i>
+                                    <p class="text-muted mb-0">No courses found</p>
+                                    <small class="text-muted">Try adjusting your filters or create a new course</small>
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <tr class="align-middle">
+                                    <td class="fw-semibold" style="font-size: 1rem;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="course-icon me-2 d-flex align-items-center justify-content-center rounded-2"
+                                                 style="width: 36px; height: 36px; background: rgba(79, 70, 229, 0.1);">
+                                                <i class="fas fa-book" style="color: var(--primary-color);"></i>
+                                            </div>
+                                            <span>@item.Title</span>
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 1rem;">
+                                        <span class="fw-medium" >@item.Credits </span>
+                                    </td>
+                                    <td style="font-size: 1rem;">
+                                        <span class="fw-medium">@item.Semester</span>
+                                    </td>
+                                    <td style="font-size: 1rem;">
+                                        <span class="text-muted">@item.Programme</span>
+                                    </td>
+                                    <td style="font-size: 1rem;">
+                                        <small class="text-muted">@item.EducationLevel</small>
+                                    </td>
+                                    <td style="font-size: 1rem;">
+                                        <div class="d-flex flex-column">
+                                            @if (item.FirstTeacher != null)
+                                            {
+                                                <small class="text-primary">
+                                                    <i class="fas fa-user-tie me-1"></i>@item.FirstTeacher.FullName
+                                                </small>
+                                            }
+                                            else
+                                            {
+                                                <small class="text-muted">
+                                                    <i class="fas fa-user-tie me-1"></i>Not assigned
+                                                </small>
+                                            }
+                                            @if (item.SecondTeacher != null)
+                                            {
+                                                <small class="text-secondary">
+                                                    <i class="fas fa-user-tie me-1"></i>@item.SecondTeacher.FullName
+                                                </small>
+                                            }
+                                        </div>
+                                    </td>
+                                    <td class="text-end" style="font-size: 1rem;">
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            <div class="d-flex gap-2 justify-content-end">
+                                                <a asp-action="Edit" asp-route-id="@item.Id"
+                                                class="btn btn-sm btn-outline-primary"
+                                                title="Edit Course">
+                                                    <i class="fas fa-edit me-1"></i>Edit
+                                                </a>
+                                                <a asp-action="Details" asp-route-id="@item.Id"
+                                                class="btn btn-sm btn-outline-info"
+                                                title="View Details">
+                                                    <i class="fas fa-eye me-1"></i>View
+                                                </a>
+                                                <a asp-action="Delete" asp-route-id="@item.Id"
+                                                class="btn btn-sm btn-outline-danger"
+                                                title="Delete Course">
+                                                    <i class="fas fa-trash me-1"></i>Delete
+                                                </a>
+                                            </div>
+                                        }
+                                        else if (User.IsInRole("Teacher"))
+                                        {
+                                            <a asp-action="TeacherView" asp-route-id="@item.Id"
+                                               class="btn btn-sm btn-primary">
+                                                <i class="fas fa-eye me-1"></i>View
+                                            </a>
+                                        }
+
+                                        else if (User.IsInRole("Student"))
+                                        {
+                                            <a asp-action="StudentView" asp-route-id="@item.Id"
+                                               class="btn btn-sm btn-primary">
+                                                <i class="fas fa-eye me-1"></i>View
+                                            </a>
+                                        }
+
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Footer -->
+    @if (Model.Any())
+    {
+        <div class="mt-3 text-end">
+            <small class="text-muted">
+                <i class="fas fa-info-circle me-1"></i>
+                Showing @Model.Count() course@(Model.Count() != 1 ? "s" : "")
+            </small>
+        </div>
+    }
+</div>
+
+<style>
+    .table-hover tbody tr:hover {
+        background-color: rgba(79, 70, 229, 0.03);
+        transition: background-color 0.2s ease;
+    }
+
+    .course-icon {
+        transition: transform 0.2s ease;
+    }
+
+    .table-hover tbody tr:hover .course-icon {
+        transform: scale(1.1);
+        background: rgba(79, 70, 229, 0.15) !important;
+    }
+
+    .btn-sm {
+        font-size: 0.875rem !important;
+        padding: 0.25rem 0.75rem !important;
+    }
+
+    .badge {
+        font-weight: 500;
+    }
+
+    .card {
+        border-radius: 12px;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(79, 70, 229, 0.15);
+    }
+
+    thead th:first-child {
+        border-top-left-radius: 12px !important;
+    }
+
+    thead th:last-child {
+        border-top-right-radius: 12px !important;
+    }
+
+    tbody td {
+        font-size: 17px !important;
+        padding: 1rem 0.75rem !important;
+        vertical-align: middle !important;
+    }
+
+    thead th {
+        font-size: 1rem !important;
+        padding: 1rem 0.75rem !important;
+        font-weight: 600;
+    }
+
+    .btn-outline-primary, .btn-outline-info, .btn-outline-danger {
+        border-width: 1px;
+        min-width: 70px;
+    }
+
+    @@media (max-width: 1200px) {
+        .btn-sm span {
+            display: none;
         }
-    </tbody>
-</table>
+
+        .btn-sm i {
+            margin-right: 0 !important;
+        }
+
+        .btn-sm {
+            min-width: 40px;
+        }
+    }
+
+    @@media (max-width: 992px) {
+        .btn-sm {
+            padding: 0.25rem 0.5rem !important;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .d-flex.justify-content-between.align-items-center {
+            flex-direction: column;
+            align-items: flex-start !important;
+            gap: 1rem;
+        }
+
+        .gap-2 {
+            gap: 0.5rem !important;
+        }
+    }
+</style>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add subtle animation to table rows
+            const tableRows = document.querySelectorAll('.table-hover tbody tr');
+            tableRows.forEach((row, index) => {
+                row.style.opacity = '0';
+                row.style.transform = 'translateY(10px)';
+
+                setTimeout(() => {
+                    row.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                    row.style.opacity = '1';
+                    row.style.transform = 'translateY(0)';
+                }, index * 50);
+            });
+
+            // Add click effect to action buttons
+            document.querySelectorAll('.btn-sm').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            });
+        });
+    </script>
+}

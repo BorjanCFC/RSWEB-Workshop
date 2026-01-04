@@ -39,5 +39,10 @@ namespace Workshop1.Models
         // Navigation
         public ICollection<Course> FirstTeacherCourses { get; set; } = new List<Course>();
         public ICollection<Course> SecondTeacherCourses { get; set; } = new List<Course>();
+
+        public string? ApplicationUserId { get; set; }
+        [ForeignKey(nameof(ApplicationUserId))]
+        public ApplicationUser? ApplicationUser { get; set; }
+
     }
 }

@@ -1,0 +1,155 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Workshop1.Models
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <div class="d-flex align-items-center gap-3">
+        <div class="nav-user-info">
+            <span class="navbar-text d-flex align-items-center">
+                <div class="user-avatar me-2">
+                    <i class="fas fa-user-circle" style="font-size: 1.3rem; color: rgba(255, 255, 255, 0.9);"></i>
+                </div>
+                <div class="d-flex flex-column">
+                    <small class="text-white-50" style="font-size: 0.8rem;">Welcome back</small>
+                    <span class="fw-semibold text-white" style="font-size: 0.95rem;">@UserManager.GetUserName(User)</span>
+                </div>
+            </span>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-user dropdown-toggle d-flex align-items-center" type="button" id="userDropdown"
+                    data-bs-toggle="dropdown" aria-expanded="false" style="
+                            background: rgba(255, 255, 255, 0.1);
+                            border: 1px solid rgba(255, 255, 255, 0.2);
+                            border-radius: 8px;
+                            padding: 0.4rem 0.8rem;
+                            color: white;">
+                <i class="fas fa-chevron-down ms-1" style="font-size: 0.8rem;"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end shadow-lg" aria-labelledby="userDropdown" style="
+                    background: white;
+                    border: none;
+                    border-radius: 12px;
+                    min-width: 200px;
+                    padding: 0.5rem;
+                    margin-top: 0.5rem;">
+                <li>
+                    <a class="dropdown-item d-flex align-items-center" asp-area="Identity" asp-page="/Account/Manage/Index">
+                        <i class="fas fa-user-cog me-2" style="color: var(--primary-color);"></i>
+                        <span>Profile Settings</span>
+                    </a>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <form id="logoutForm" class="dropdown-item p-0" asp-area="Identity" asp-page="/Account/Logout"
+                          asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post">
+                        <button id="logout" type="submit" class="btn btn-logout w-100 text-start d-flex align-items-center" style="
+                                background: none;
+                                border: none;
+                                padding: 0.5rem 0.75rem;
+                                color: #dc3545;
+                                transition: all 0.2s ease;">
+                            <i class="fas fa-sign-out-alt me-2"></i>
+                            <span>Logout</span>
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+}
+else
+{
+    <div class="d-flex align-items-center gap-2">
+        <a class="btn btn-outline-light btn-sm px-3" id="login" asp-area="Identity" asp-page="/Account/Login" style="
+                border-radius: 8px;
+                font-weight: 500;
+                transition: all 0.3s ease;">
+            <i class="fas fa-sign-in-alt me-1"></i>Login
+        </a>
+        @* Optional: If you want to show Register button *@
+        @* <a class="btn btn-light btn-sm px-3" id="register" asp-area="Identity" asp-page="/Account/Register" style="
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;">
+            <i class="fas fa-user-plus me-1"></i>Register
+        </a> *@
+    </div>
+}
+
+<style>
+    /* Additional styles for login partial */
+    .user-avatar {
+        background: rgba(255, 255, 255, 0.1);
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-user {
+        transition: all 0.3s ease !important;
+        cursor: pointer;
+    }
+
+        .btn-user:hover {
+            background: rgba(255, 255, 255, 0.2) !important;
+            transform: translateY(-1px);
+        }
+
+        .btn-user:active, .btn-user.show {
+            background: rgba(255, 255, 255, 0.25) !important;
+        }
+
+    .dropdown-item {
+        border-radius: 8px;
+        padding: 0.5rem 0.75rem;
+        margin: 0.15rem 0;
+        transition: all 0.2s ease;
+        color: #4b5563;
+        font-weight: 500;
+    }
+
+        .dropdown-item:hover {
+            background-color: rgba(79, 70, 229, 0.1);
+            color: var(--primary-color);
+            transform: translateX(2px);
+        }
+
+    .btn-logout:hover {
+        background-color: rgba(220, 53, 69, 0.1) !important;
+        border-radius: 8px;
+    }
+
+    .dropdown-divider {
+        margin: 0.4rem 0;
+        opacity: 0.2;
+    }
+
+    .nav-user-info:hover .user-avatar {
+        border-color: rgba(255, 255, 255, 0.5);
+        transform: scale(1.05);
+        transition: all 0.3s ease;
+    }
+
+    /* Responsive adjustments */
+    @@media (max-width: 768px) {
+        .nav-user-info .navbar-text {
+            flex-direction: row !important;
+        }
+
+            .nav-user-info .navbar-text .d-flex {
+                flex-direction: row !important;
+                align-items: center;
+            }
+
+            .nav-user-info .navbar-text small {
+                display: none;
+            }
+    }
+</style>

@@ -40,5 +40,9 @@ namespace Workshop1.Models
 
         // Navigation
         public ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
+
+        public string? ApplicationUserId { get; set; }
+        public ApplicationUser? ApplicationUser { get; set; }
+
     }
 }

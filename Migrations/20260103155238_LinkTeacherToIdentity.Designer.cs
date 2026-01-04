@@ -12,8 +12,8 @@ using Workshop1.Data;
 namespace Workshop1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251219172137_AddStudentProfileImage")]
-    partial class AddStudentProfileImage
+    [Migration("20260103155238_LinkTeacherToIdentity")]
+    partial class LinkTeacherToIdentity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,211 @@ namespace Workshop1.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("Workshop1.Models.ApplicationUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TeacherId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers", (string)null);
+                });
 
             modelBuilder.Entity("Workshop1.Models.Course", b =>
                 {
@@ -74,6 +279,7 @@ namespace Workshop1.Migrations
                             EducationLevel = "Undergraduate",
                             FirstTeacherId = 1,
                             Programme = "IT",
+                            SecondTeacherId = 2,
                             Semester = 3,
                             Title = "Databases"
                         },
@@ -84,6 +290,7 @@ namespace Workshop1.Migrations
                             EducationLevel = "Undergraduate",
                             FirstTeacherId = 2,
                             Programme = "IT",
+                            SecondTeacherId = 3,
                             Semester = 4,
                             Title = "Web Programming"
                         },
@@ -94,6 +301,7 @@ namespace Workshop1.Migrations
                             EducationLevel = "Undergraduate",
                             FirstTeacherId = 3,
                             Programme = "SE",
+                            SecondTeacherId = 5,
                             Semester = 5,
                             Title = "Software Engineering"
                         },
@@ -104,6 +312,7 @@ namespace Workshop1.Migrations
                             EducationLevel = "Undergraduate",
                             FirstTeacherId = 4,
                             Programme = "IT",
+                            SecondTeacherId = 1,
                             Semester = 4,
                             Title = "Computer Networks"
                         },
@@ -114,6 +323,7 @@ namespace Workshop1.Migrations
                             EducationLevel = "Undergraduate",
                             FirstTeacherId = 5,
                             Programme = "SE",
+                            SecondTeacherId = 4,
                             Semester = 6,
                             Title = "Artificial Intelligence"
                         });
@@ -274,6 +484,7 @@ namespace Workshop1.Migrations
                         {
                             Id = 1L,
                             CurrentSemester = 3,
+                            EducationLevel = "Bachelor",
                             EnrollmentDate = new DateTime(2022, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Petar",
                             LastName = "Nikolov",
@@ -283,6 +494,7 @@ namespace Workshop1.Migrations
                         {
                             Id = 2L,
                             CurrentSemester = 3,
+                            EducationLevel = "Bachelor",
                             EnrollmentDate = new DateTime(2022, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Marija",
                             LastName = "Stankova",
@@ -292,6 +504,7 @@ namespace Workshop1.Migrations
                         {
                             Id = 3L,
                             CurrentSemester = 5,
+                            EducationLevel = "Bachelor",
                             EnrollmentDate = new DateTime(2021, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Jovan",
                             LastName = "Trajkov",
@@ -301,6 +514,7 @@ namespace Workshop1.Migrations
                         {
                             Id = 4L,
                             CurrentSemester = 5,
+                            EducationLevel = "Bachelor",
                             EnrollmentDate = new DateTime(2021, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Sara",
                             LastName = "Mihajlova",
@@ -310,10 +524,61 @@ namespace Workshop1.Migrations
                         {
                             Id = 5L,
                             CurrentSemester = 6,
+                            EducationLevel = "Bachelor",
                             EnrollmentDate = new DateTime(2020, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "David",
                             LastName = "Kirilov",
                             StudentId = "201005"
+                        },
+                        new
+                        {
+                            Id = 6L,
+                            CurrentSemester = 1,
+                            EducationLevel = "Bachelor",
+                            EnrollmentDate = new DateTime(2023, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstName = "Bojan",
+                            LastName = "Denkovski",
+                            StudentId = "201006"
+                        },
+                        new
+                        {
+                            Id = 7L,
+                            CurrentSemester = 2,
+                            EducationLevel = "Bachelor",
+                            EnrollmentDate = new DateTime(2023, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstName = "Elma",
+                            LastName = "Ristova",
+                            StudentId = "201007"
+                        },
+                        new
+                        {
+                            Id = 8L,
+                            CurrentSemester = 1,
+                            EducationLevel = "Bachelor",
+                            EnrollmentDate = new DateTime(2024, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstName = "Dimitar",
+                            LastName = "Nacev",
+                            StudentId = "201008"
+                        },
+                        new
+                        {
+                            Id = 9L,
+                            CurrentSemester = 8,
+                            EducationLevel = "Bachelor",
+                            EnrollmentDate = new DateTime(2019, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstName = "Katerina",
+                            LastName = "Spasova",
+                            StudentId = "201009"
+                        },
+                        new
+                        {
+                            Id = 10L,
+                            CurrentSemester = 7,
+                            EducationLevel = "Bachelor",
+                            EnrollmentDate = new DateTime(2020, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstName = "Aleksandar",
+                            LastName = "Popov",
+                            StudentId = "201010"
                         });
                 });
 
@@ -328,6 +593,9 @@ namespace Workshop1.Migrations
                     b.Property<string>("AcademicRank")
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Degree")
                         .HasMaxLength(50)
@@ -354,6 +622,10 @@ namespace Workshop1.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId")
+                        .IsUnique()
+                        .HasFilter("[ApplicationUserId] IS NOT NULL");
 
                     b.ToTable("Teachers");
 
@@ -405,6 +677,57 @@ namespace Workshop1.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.HasOne("Workshop1.Models.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.HasOne("Workshop1.Models.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Workshop1.Models.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.HasOne("Workshop1.Models.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Workshop1.Models.Course", b =>
                 {
                     b.HasOne("Workshop1.Models.Teacher", "FirstTeacher")
@@ -439,6 +762,20 @@ namespace Workshop1.Migrations
                     b.Navigation("Course");
 
                     b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("Workshop1.Models.Teacher", b =>
+                {
+                    b.HasOne("Workshop1.Models.ApplicationUser", "ApplicationUser")
+                        .WithOne("Teacher")
+                        .HasForeignKey("Workshop1.Models.Teacher", "ApplicationUserId");
+
+                    b.Navigation("ApplicationUser");
+                });
+
+            modelBuilder.Entity("Workshop1.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("Workshop1.Models.Course", b =>

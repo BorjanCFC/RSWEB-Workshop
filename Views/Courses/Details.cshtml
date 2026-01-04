@@ -1,60 +1,214 @@
 ﻿@model Workshop1.Models.Course
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Course Details";
 }
 
-<h1>Details</h1>
+<div class="container py-3">
+    <!-- Course Information Card -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-white border-0 py-3" style="border-bottom: 1px solid rgba(79, 70, 229, 0.1);">
+            <h3 class="card-title mb-0 fw-bold" style="color: var(--primary-color);">
+                <i class="fas fa-book-open me-2"></i>
+                @Model.Title
+            </h3>
+        </div>
+        <div class="card-body p-4">
+            <div class="row g-4">
+                <!-- First Column -->
+                <div class="col-md-6">
+                    <div class="info-item mb-3">
+                        <div class="d-flex align-items-center mb-1">
+                            <div class="info-icon me-3 d-flex align-items-center justify-content-center rounded-2"
+                                 style="width: 40px; height: 40px; background: rgba(79, 70, 229, 0.1);">
+                                <i class="fas fa-star" style="color: var(--primary-color);"></i>
+                            </div>
+                            <div>
+                                <small class="text-muted d-block">Credits</small>
+                                <h5 class="mb-0 fw-bold">@Model.Credits</h5>
+                            </div>
+                        </div>
+                    </div>
 
-<div>
-    <h4>Course</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Credits)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Credits)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Semester)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Semester)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Programme)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Programme)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EducationLevel)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EducationLevel)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstTeacher)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FirstTeacher.FirstName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SecondTeacher)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SecondTeacher.FirstName)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+                    <div class="info-item mb-3">
+                        <div class="d-flex align-items-center mb-1">
+                            <div class="info-icon me-3 d-flex align-items-center justify-content-center rounded-2"
+                                 style="width: 40px; height: 40px; background: rgba(16, 185, 129, 0.1);">
+                                <i class="fas fa-calendar-alt" style="color: var(--secondary-color);"></i>
+                            </div>
+                            <div>
+                                <small class="text-muted d-block">Semester</small>
+                                <h5 class="mb-0 fw-bold">@Model.Semester</h5>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-item mb-3">
+                        <div class="d-flex align-items-center mb-1">
+                            <div class="info-icon me-3 d-flex align-items-center justify-content-center rounded-2"
+                                 style="width: 40px; height: 40px; background: rgba(245, 158, 11, 0.1);">
+                                <i class="fas fa-graduation-cap" style="color: #f59e0b;"></i>
+                            </div>
+                            <div>
+                                <small class="text-muted d-block">Programme</small>
+                                <h5 class="mb-0 fw-bold">@Model.Programme</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Second Column -->
+                <div class="col-md-6">
+                    <div class="info-item mb-3">
+                        <div class="d-flex align-items-center mb-1">
+                            <div class="info-icon me-3 d-flex align-items-center justify-content-center rounded-2"
+                                 style="width: 40px; height: 40px; background: rgba(147, 51, 234, 0.1);">
+                                <i class="fas fa-university" style="color: #9333ea;"></i>
+                            </div>
+                            <div>
+                                <small class="text-muted d-block">Education Level</small>
+                                <h5 class="mb-0 fw-bold">@Model.EducationLevel</h5>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-item mb-3">
+                        <div class="d-flex align-items-center mb-1">
+                            <div class="info-icon me-3 d-flex align-items-center justify-content-center rounded-2"
+                                 style="width: 40px; height: 40px; background: rgba(59, 130, 246, 0.1);">
+                                <i class="fas fa-chalkboard-teacher" style="color: #3b82f6;"></i>
+                            </div>
+                            <div>
+                                <small class="text-muted d-block">First Teacher</small>
+                                <h5 class="mb-0 fw-bold">
+                                    @(Model.FirstTeacher == null ? "-- none --" : $"{Model.FirstTeacher.FirstName} {Model.FirstTeacher.LastName}")
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-item mb-3">
+                        <div class="d-flex align-items-center mb-1">
+                            <div class="info-icon me-3 d-flex align-items-center justify-content-center rounded-2"
+                                 style="width: 40px; height: 40px; background: rgba(14, 165, 233, 0.1);">
+                                <i class="fas fa-user-tie" style="color: #0ea5e9;"></i>
+                            </div>
+                            <div>
+                                <small class="text-muted d-block">Second Teacher</small>
+                                <h5 class="mb-0 fw-bold">
+                                    @(Model.SecondTeacher == null ? "-- none --" : $"{Model.SecondTeacher.FirstName} {Model.SecondTeacher.LastName}")
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4>Enrolled students</h4>
+
+    @{
+        var enrollments = (Model.Enrollments ?? new List<Workshop1.Models.Enrollment>());
+
+        var groups = enrollments
+        .OrderByDescending(e => e.Year ?? 0)
+        .ThenBy(e => e.Semester)
+        .ThenBy(e => e.Student.LastName)
+        .ThenBy(e => e.Student.FirstName)
+        .GroupBy(e => new { Year = e.Year ?? 0, Semester = e.Semester ?? "?" })
+        .ToList();
+    }
+
+    @if (!groups.Any())
+    {
+        <div class="alert alert-info">
+            No enrollments for this course yet.
+        </div>
+    }
+    else
+    {
+        foreach (var g in groups)
+        {
+            <div class="card mb-3">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <strong>@g.Key.Year / @g.Key.Semester</strong>
+                    <span class="badge bg-secondary">Total: @g.Count()</span>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th style="width:120px;">Index</th>
+                                <th>Student</th>
+                                <th style="width:160px;">Status</th>
+                                <th style="width:140px;">Finish date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var e in g)
+                            {
+                                var isActive = e.FinishDate == null;
+
+
+                                <tr>
+                                    <td>@e.Student.StudentId</td>
+                                    <td>@($"{e.Student.FirstName} {e.Student.LastName}")</td>
+                                    <td>
+                                        @if (isActive)
+                                        {
+                                            <span class="badge bg-success">Active</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning text-dark">Finished</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @(e.FinishDate.HasValue? e.FinishDate.Value.ToString("yyyy-MM-dd") : "-")
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    }
+
+    <div class="mt-3">
+        @* Ако сакаш Edit само за Admin, можеш да го wrap-неш со User.IsInRole("Admin") *@
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+        <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+    </div>
+
+    <style>
+        .card {
+            border-radius: 12px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        .info-item {
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            background: white;
+            transition: transform 0.2s ease;
+        }
+
+            .info-item:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+                border-color: rgba(79, 70, 229, 0.2);
+            }
+
+        .info-icon {
+            transition: transform 0.2s ease;
+        }
+
+        .info-item:hover .info-icon {
+            transform: scale(1.1);
+        }
+    </style>
 </div>

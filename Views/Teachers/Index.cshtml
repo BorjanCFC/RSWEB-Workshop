@@ -4,69 +4,279 @@
     ViewData["Title"] = "Teachers";
 }
 
-<h1>Teachers</h1>
-
-<p>
-    <a asp-action="Create" class="btn btn-success">Create New</a>
-</p>
-
-<form asp-action="Index" method="get" class="mb-3">
-    <div class="row g-2">
-        <div class="col-md-3">
-            <label class="form-label">First name</label>
-            <input type="text" name="firstName" value="@Context.Request.Query["firstName"]" class="form-control" />
+<div class="container py-4">
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="display-6 fw-bold" style="color: var(--primary-color);">Teachers</h1>
         </div>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-chalkboard-teacher me-2"></i>Add New Teacher
+        </a>
+    </div>
 
-        <div class="col-md-3">
-            <label class="form-label">Last name</label>
-            <input type="text" name="lastName" value="@Context.Request.Query["lastName"]" class="form-control" />
-        </div>
+    <!-- Filter Card -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body p-4">
+            <h5 class="card-title mb-3 fw-semibold">
+                <i class="fas fa-filter me-2" style="color: var(--primary-color);"></i>
+                Filter Teachers
+            </h5>
 
-        <div class="col-md-3">
-            <label class="form-label">Degree</label>
-            <input type="text" name="degree" value="@Context.Request.Query["degree"]" class="form-control" />
-        </div>
+            <form asp-action="Index" method="get">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label fw-medium">First Name</label>
+                        <input type="text" name="firstName" value="@Context.Request.Query["firstName"]"
+                               class="form-control" placeholder="First name..." />
+                    </div>
 
-        <div class="col-md-3">
-            <label class="form-label">Academic rank</label>
-            <input type="text" name="academicRank" value="@Context.Request.Query["academicRank"]" class="form-control" />
-        </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-medium">Last Name</label>
+                        <input type="text" name="lastName" value="@Context.Request.Query["lastName"]"
+                               class="form-control" placeholder="Last name..." />
+                    </div>
 
-        <div class="col-12 mt-2">
-            <button type="submit" class="btn btn-primary">Filter</button>
-            <a asp-action="Index" class="btn btn-outline-secondary">Clear</a>
+                    <div class="col-md-3">
+                        <label class="form-label fw-medium">Degree</label>
+                        <input type="text" name="degree" value="@Context.Request.Query["degree"]"
+                               class="form-control" placeholder="Degree..." />
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-medium">Academic Rank</label>
+                        <input type="text" name="academicRank" value="@Context.Request.Query["academicRank"]"
+                               class="form-control" placeholder="Academic rank..." />
+                    </div>
+
+                    <div class="col-12 mt-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search me-1"></i>Apply Filters
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="fas fa-times me-1"></i>Clear Filters
+                        </a>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
-</form>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>First name</th>
-            <th>Last name</th>
-            <th>Degree</th>
-            <th>Academic rank</th>
-            <th>Office</th>
-            <th>Hire date</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.FirstName</td>
-                <td>@item.LastName</td>
-                <td>@item.Degree</td>
-                <td>@item.AcademicRank</td>
-                <td>@item.OfficeNumber</td>
-                <td>@item.HireDate</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
+    <!-- Teachers Table -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead style="background: linear-gradient(135deg, var(--primary-color), var(--primary-light)); color: white;">
+                        <tr>
+                            <th class="border-0" style="border-top-left-radius: 8px;">
+                                <i class="fas fa-user me-1"></i>First Name
+                            </th>
+                            <th class="border-0">
+                                <i class="fas fa-user me-1"></i>Last Name
+                            </th>
+                            <th class="border-0">
+                                <i class="fas fa-graduation-cap me-1"></i>Degree
+                            </th>
+                            <th class="border-0">
+                                <i class="fas fa-award me-1"></i>Academic Rank
+                            </th>
+                            <th class="border-0">
+                                <i class="fas fa-door-open me-1"></i>Office
+                            </th>
+                            <th class="border-0">
+                                <i class="fas fa-calendar-alt me-1"></i>Hire Date
+                            </th>
+                            <th class="border-0 text-end" style="border-top-right-radius: 8px;">
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.Any())
+                        {
+                            <tr>
+                                <td colspan="7" class="text-center py-4">
+                                    <i class="fas fa-chalkboard-teacher fa-2x text-muted mb-3"></i>
+                                    <p class="text-muted mb-0">No teachers found</p>
+                                    <small class="text-muted">Try adjusting your filters or add a new teacher</small>
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <tr class="align-middle">
+                                    <td style="font-size: 17px!important;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="teacher-icon me-2 d-flex align-items-center justify-content-center rounded-2"
+                                                 style="width: 36px; height: 36px; background: rgba(79, 70, 229, 0.1);">
+                                                <i class="fas fa-user-tie" style="color: var(--primary-color);"></i>
+                                            </div>
+                                            <span class="fw-medium">@item.FirstName</span>
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 17px!important;">
+                                        <span class="fw-medium">@item.LastName</span>
+                                    </td>
+                                    <td style="font-size: 17px!important;">
+                                        <span class="text-muted">@item.Degree</span>
+                                    </td>
+                                    <td style="font-size: 17px!important;">
+                                        <span class="badge rounded-pill"
+                                              style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.2));
+                                                             color: var(--secondary-color); padding: 0.25rem 0.75rem;">
+                                            @item.AcademicRank
+                                        </span>
+                                    </td>
+                                    <td style="font-size: 17px!important;">
+                                        @if (!string.IsNullOrEmpty(item.OfficeNumber))
+                                        {
+                                            <span class="badge rounded-pill"
+                                                  style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(245, 158, 11, 0.2));
+                                                                     color: #f59e0b; padding: 0.25rem 0.75rem;">
+                                                <i class="fas fa-door-closed me-1"></i>@item.OfficeNumber
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+                                    <td style="font-size: 17px!important;">
+                                        <span class="text-muted">
+                                            @(item.HireDate?.ToString("yyyy-MM-dd") ?? "")
+                                        </span>
+                                    </td>
+                                    <td class="text-end" style="font-size: 17px!important;">
+                                        <div class="d-flex gap-2 justify-content-end">
+                                            <a asp-action="Edit" asp-route-id="@item.Id"
+                                               class="btn btn-sm btn-outline-primary"
+                                               title="Edit Teacher">
+                                                <i class="fas fa-edit me-1"></i>Edit
+                                            </a>
+                                            <a asp-action="Details" asp-route-id="@item.Id"
+                                               class="btn btn-sm btn-outline-info"
+                                               title="View Details">
+                                                <i class="fas fa-eye me-1"></i>View
+                                            </a>
+                                            <a asp-action="Delete" asp-route-id="@item.Id"
+                                               class="btn btn-sm btn-outline-danger"
+                                               title="Delete Teacher">
+                                                <i class="fas fa-trash me-1"></i>Delete
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Footer -->
+    @if (Model.Any())
+    {
+        <div class="mt-3 text-end">
+            <small class="text-muted">
+                <i class="fas fa-info-circle me-1"></i>
+                Showing @Model.Count() teacher@(Model.Count() != 1 ? "s" : "")
+            </small>
+        </div>
+    }
+</div>
+
+<style>
+    .table-hover tbody tr:hover {
+        background-color: rgba(79, 70, 229, 0.03);
+        transition: background-color 0.2s ease;
+    }
+
+    .teacher-icon {
+        transition: transform 0.2s ease;
+    }
+
+    .table-hover tbody tr:hover .teacher-icon {
+        transform: scale(1.1);
+        background: rgba(79, 70, 229, 0.15) !important;
+    }
+
+    .btn-sm {
+        font-size: 0.875rem !important;
+        padding: 0.25rem 0.75rem !important;
+    }
+
+    .badge {
+        font-weight: 500;
+    }
+
+    .card {
+        border-radius: 12px;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(79, 70, 229, 0.15);
+    }
+
+    thead th:first-child {
+        border-top-left-radius: 12px !important;
+    }
+
+    thead th:last-child {
+        border-top-right-radius: 12px !important;
+    }
+
+    tbody td {
+        font-size: 17px !important;
+        padding: 1rem 0.75rem !important;
+        vertical-align: middle !important;
+    }
+
+    thead th {
+        font-size: 1rem !important;
+        padding: 1rem 0.75rem !important;
+        font-weight: 600;
+    }
+
+    .btn-outline-primary, .btn-outline-info, .btn-outline-danger {
+        border-width: 1px;
+        min-width: 70px;
+    }
+
+    @@media (max-width: 1200px) {
+        .btn-sm span {
+            display: none;
         }
-    </tbody>
-</table>
+
+        .btn-sm i {
+            margin-right: 0 !important;
+        }
+
+        .btn-sm {
+            min-width: 40px;
+        }
+    }
+
+    @@media (max-width: 992px) {
+        .btn-sm {
+            padding: 0.25rem 0.5rem !important;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .d-flex.justify-content-between.align-items-center {
+            flex-direction: column;
+            align-items: flex-start !important;
+            gap: 1rem;
+        }
+
+        .gap-2 {
+            gap: 0.5rem !important;
+        }
+    }
+</style>

@@ -1,46 +1,175 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+@using Workshop1.Data
+@using Workshop1.Models
+@inject UserManager<ApplicationUser> UserManager
+@inject ApplicationDbContext Db
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Workshop1</title>
+    <title>@ViewData["Title"] - EduManage Platform</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Workshop1.styles.css" asp-append-version="true" />
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Workshop1</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+        <nav class="navbar navbar-expand-lg navbar-dark border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-graduation-cap me-2"></i>EduManage
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+                        aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" ? "active" : "")"
+                               asp-controller="Home" asp-action="Index">
+                                <i class="fas fa-home me-1"></i>Home
+                            </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+
+                        @* Admin menu *@
+                        @if (User.Identity?.IsAuthenticated == true && User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Students" ? "active" : "")"
+                                   asp-controller="Students" asp-action="Index">
+                                    <i class="fas fa-user-graduate me-1"></i>Students
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Teachers" ? "active" : "")"
+                                   asp-controller="Teachers" asp-action="Index">
+                                    <i class="fas fa-chalkboard-teacher me-1"></i>Teachers
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Courses" ? "active" : "")"
+                                   asp-controller="Courses" asp-action="Index">
+                                    <i class="fas fa-book-open me-1"></i>Courses
+                                </a>
+                            </li>
+                        }
+
+                        @* Teacher menu *@
+                        @if (User.Identity?.IsAuthenticated == true && User.IsInRole("Teacher"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Courses" ? "active" : "")"
+                                   asp-controller="Courses" asp-action="Index">
+                                    <i class="fas fa-book-open me-1"></i>Courses
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "TeacherProfile" ? "active" : "")"
+                                   asp-controller="Teachers" asp-action="MyProfile">
+                                    <i class="fas fa-user me-1"></i>My Profile
+                                </a>
+                            </li>
+                        }
+
+                        @* Student menu *@
+                        @if (User.Identity?.IsAuthenticated == true && User.IsInRole("Student"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Courses" ? "active" : "")"
+                                   asp-controller="Courses" asp-action="Index">
+                                    <i class="fas fa-book-open me-1"></i>Courses
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "StudentProfile" ? "active" : "")"
+                                   asp-controller="Students" asp-action="MyProfile">
+                                    <i class="fas fa-user me-1"></i>My Profile
+                                </a>
+                            </li>
+                        }
+
+
+                    </ul>
+
+                    @* Right side: Login/Logout *@
+                    <ul class="navbar-nav ms-auto">
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <li class="nav-item">
+                                @{
+                                    var displayName = User.Identity!.Name!; // default email
+
+                                    var userId = UserManager.GetUserId(User);
+
+                                    if (!string.IsNullOrEmpty(userId))
+                                    {
+                                        var appUser = await Db.Users
+                                        .Include(u => u.Teacher)
+                                        .Include(u => u.Student)
+                                        .FirstOrDefaultAsync(u => u.Id == userId);
+
+                                        if (User.IsInRole("Teacher") && appUser?.Teacher != null)
+                                        {
+                                            displayName = appUser.Teacher.FullName;
+                                        }
+                                        else if (User.IsInRole("Student") && appUser?.Student != null)
+                                        {
+                                            displayName = appUser.Student.FullName;
+                                        }
+                                        else if (User.IsInRole("Admin"))
+                                        {
+                                            displayName = "Admin";
+                                        }
+                                    }
+                                }
+
+                                <span class="navbar-text me-3">
+                                    <i class="fas fa-user-circle me-1"></i>
+                                    Welcome, @displayName!
+                                </span>
+
+                            </li>
+
+                            <li class="nav-item">
+                                <form class="d-inline" asp-area="Identity" asp-page="/Account/Logout"
+                                      asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post">
+                                    <button type="submit" class="btn btn-outline-light">
+                                        <i class="fas fa-sign-out-alt me-1"></i>Logout
+                                    </button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="btn btn-outline-light me-2" asp-area="Identity" asp-page="/Account/Login">
+                                    <i class="fas fa-sign-in-alt me-1"></i>Login
+                                </a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+
+    <div class="container flex-grow-1">
+        <main role="main" class="pb-4">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - Workshop1 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

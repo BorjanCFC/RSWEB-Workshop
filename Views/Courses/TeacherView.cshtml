@@ -1,0 +1,161 @@
+﻿@model Workshop1.Models.ViewModels.TeacherCourseEnrollmentsVM
+
+@{
+    ViewData["Title"] = "Course Students";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="fw-bold" style="color: var(--primary-color);">@Model.CourseTitle</h2>
+            <div class="text-muted">Enrolled students</div>
+        </div>
+
+        <form method="get" asp-action="TeacherView" class="d-flex gap-2 align-items-center">
+            <input type="hidden" name="id" value="@Model.CourseId" />
+            <select name="year" class="form-select" style="max-width: 180px;">
+                @foreach (var y in Model.Years)
+                {
+                    <option value="@y" selected="@(y == Model.SelectedYear)">@y</option>
+                }
+            </select>
+            <button class="btn btn-outline-primary" type="submit">
+                <i class="fas fa-filter me-1"></i>Show
+            </button>
+        </form>
+    </div>
+
+    <form asp-action="UpdateEnrollments" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="CourseId" />
+        <input type="hidden" asp-for="CourseTitle" />
+        <input type="hidden" asp-for="SelectedYear" />
+
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="text-white" style="background: linear-gradient(135deg, var(--primary-color), var(--primary-light));">
+                            <tr>
+                                <th class="ps-3">Index</th>
+                                <th>Student</th>
+                                <th style="width:120px;">Exam</th>
+                                <th style="width:120px;">Seminar</th>
+                                <th style="width:120px;">Project</th>
+                                <th style="width:140px;">Additional</th>
+                                <th style="width:110px;">Grade</th>
+                                <th style="width:170px;">Finish date</th>
+                                <th>Seminar URL</th>
+                                <th>Project URL</th>
+                                <th class="pe-3">Status</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            @if (Model.Rows.Count == 0)
+                            {
+                                <tr>
+                                    <td colspan="10" class="text-center py-4 text-muted">
+                                        No enrollments for this year.
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                @for (int i = 0; i < Model.Rows.Count; i++)
+                                {
+                                    var r = Model.Rows[i];
+                                    <tr>
+                                        <td class="ps-3">
+                                            @r.StudentIndex
+                                            <input type="hidden" asp-for="Rows[i].EnrollmentId" />
+                                        </td>
+                                        <td>@r.StudentName</td>
+
+                                        <td>
+                                            <input asp-for="Rows[i].ExamPoints" class="form-control" type="number" min="0"
+                                                   disabled="@(!r.IsActive)" />
+                                        </td>
+                                        <td>
+                                            <input asp-for="Rows[i].SeminarPoints" class="form-control" type="number" min="0"
+                                                   disabled="@(!r.IsActive)" />
+                                        </td>
+                                        <td>
+                                            <input asp-for="Rows[i].ProjectPoints" class="form-control" type="number" min="0"
+                                                   disabled="@(!r.IsActive)" />
+                                        </td>
+                                        <td>
+                                            <input asp-for="Rows[i].AdditionalPoints" class="form-control" type="number" min="0"
+                                                   disabled="@(!r.IsActive)" />
+                                        </td>
+
+                                        <td>
+                                            <input asp-for="Rows[i].Grade" class="form-control" type="number" min="5" max="10"
+                                                   disabled="@(!r.IsActive)" />
+                                        </td>
+
+                                        <td>
+                                            <input asp-for="Rows[i].FinishDate" class="form-control" type="date"
+                                                   disabled="@(!r.IsActive)" />
+                                        </td>
+
+                                        <td>
+                                            @if (!string.IsNullOrWhiteSpace(r.SeminarUrl))
+                                            {
+                                                <a href="@r.SeminarUrl" download>
+                                                    <i class="fas fa-file-alt me-1"></i>Open
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">—</span>
+                                            }
+                                        </td>
+
+                                        <td>
+                                            @if (!string.IsNullOrWhiteSpace(r.ProjectUrl))
+                                            {
+                                                <a href="@r.ProjectUrl" target="_blank" rel="noopener">
+                                                    <i class="fas fa-file-code me-1"></i>Open
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">—</span>
+                                            }
+                                        </td>
+
+
+                                        <td class="pe-3">
+                                            @if (r.IsActive)
+                                            {
+                                                <span class="badge bg-success">Active</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-secondary">Finished</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card-footer bg-white d-flex justify-content-between">
+                <!-- Back to Courses -->
+                <a asp-controller="Courses" asp-action="Index"
+                   class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i>Back to Courses
+                </a>
+
+                <!-- Save -->
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-1"></i>Save changes
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

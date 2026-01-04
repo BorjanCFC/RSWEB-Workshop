@@ -4,170 +4,477 @@
     ViewData["Title"] = "Edit Course";
 }
 
-<h1>Edit</h1>
-<h4>Course</h4>
-<hr />
+<div class="container py-4">
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="display-6 fw-bold" style="color: var(--primary-color);">Edit Course</h1>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Back to List
+        </a>
+    </div>
 
-<form asp-action="Edit" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="Id" />
+    <div class="row g-4">
+        <!-- Left Column: Course Details Form -->
+        <div class="col-lg-7">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white border-0 py-3">
+                    <h5 class="card-title mb-0 fw-semibold">
+                        <i class="fas fa-edit me-2" style="color: var(--primary-color);"></i>
+                        Course Information
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Edit" method="post">
+                        @Html.AntiForgeryToken()
 
-    <div class="row">
-        <div class="col-md-6">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger border-0"></div>
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="EnrollYear" />
+                        <input type="hidden" asp-for="EnrollSemester" />
 
-            <div class="form-group mb-2">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <label asp-for="Title" class="form-label fw-semibold">
+                                    <i class="fas fa-book me-1"></i>Course Title
+                                </label>
+                                <input asp-for="Title" class="form-control form-control-lg" 
+                                       placeholder="Enter course title" />
+                                <span asp-validation-for="Title" class="text-danger small mt-1"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Credits" class="form-label fw-semibold">
+                                    <i class="fas fa-star me-1"></i>Credits
+                                </label>
+                                <input asp-for="Credits" class="form-control" 
+                                       placeholder="e.g., 3" />
+                                <span asp-validation-for="Credits" class="text-danger small mt-1"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Semester" class="form-label fw-semibold">
+                                    <i class="fas fa-calendar-alt me-1"></i>Semester
+                                </label>
+                                <input asp-for="Semester" class="form-control" 
+                                       placeholder="e.g., 1" />
+                                <span asp-validation-for="Semester" class="text-danger small mt-1"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Programme" class="form-label fw-semibold">
+                                    <i class="fas fa-graduation-cap me-1"></i>Programme
+                                </label>
+                                <input asp-for="Programme" class="form-control" 
+                                       placeholder="e.g., Computer Science" />
+                                <span asp-validation-for="Programme" class="text-danger small mt-1"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="EducationLevel" class="form-label fw-semibold">
+                                    <i class="fas fa-university me-1"></i>Education Level
+                                </label>
+                                <input asp-for="EducationLevel" class="form-control" 
+                                       placeholder="e.g., Undergraduate" />
+                                <span asp-validation-for="EducationLevel" class="text-danger small mt-1"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">
+                                    <i class="fas fa-chalkboard-teacher me-1"></i>First Teacher
+                                </label>
+                                <select asp-for="FirstTeacherId" class="form-select" 
+                                        style="background-color: #f8f9fa; border: 1px solid #dee2e6;">
+                                    <option value="" class="text-muted">-- Select first teacher --</option>
+                                    @foreach (var teacher in Model.Teachers)
+                                    {
+                                        <option value="@teacher.Value">@teacher.Text</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">
+                                    <i class="fas fa-user-tie me-1"></i>Second Teacher
+                                </label>
+                                <select asp-for="SecondTeacherId" class="form-select" 
+                                        style="background-color: #f8f9fa; border: 1px solid #dee2e6;">
+                                    <option value="" class="text-muted">-- Select second teacher --</option>
+                                    @foreach (var teacher in Model.Teachers)
+                                    {
+                                        <option value="@teacher.Value">@teacher.Text</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-12 mt-4">
+                                <button type="submit" class="btn btn-primary px-4 py-2">
+                                    <i class="fas fa-save me-2"></i>Save Course Changes
+                                </button>
+                                <a asp-action="Index" class="btn btn-outline-secondary px-4 py-2 ms-2">
+                                    <i class="fas fa-times me-1"></i>Cancel
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-
-            <div class="form-group mb-2">
-                <label asp-for="Credits" class="control-label"></label>
-                <input asp-for="Credits" class="form-control" />
-                <span asp-validation-for="Credits" class="text-danger"></span>
-            </div>
-
-            <div class="form-group mb-2">
-                <label asp-for="Semester" class="control-label"></label>
-                <input asp-for="Semester" class="form-control" />
-                <span asp-validation-for="Semester" class="text-danger"></span>
-            </div>
-
-            <div class="form-group mb-2">
-                <label asp-for="Programme" class="control-label"></label>
-                <input asp-for="Programme" class="form-control" />
-                <span asp-validation-for="Programme" class="text-danger"></span>
-            </div>
-
-            <div class="form-group mb-2">
-                <label asp-for="EducationLevel" class="control-label"></label>
-                <input asp-for="EducationLevel" class="form-control" />
-                <span asp-validation-for="EducationLevel" class="text-danger"></span>
-            </div>
-
-            <div class="form-group mb-2">
-                <label class="control-label">First Teacher</label>
-                <select asp-for="FirstTeacherId" class="form-select" asp-items="Model.Teachers">
-                    <option value="">-- none --</option>
-                </select>
-            </div>
-
-            <div class="form-group mb-3">
-                <label class="control-label">Second Teacher</label>
-                <select asp-for="SecondTeacherId" class="form-select" asp-items="Model.Teachers">
-                    <option value="">-- none --</option>
-                </select>
-            </div>
-
         </div>
 
-        <div class="col-md-6">
-            <h5>Enroll students</h5>
-
-            <div style="max-height: 260px; overflow:auto; border: 1px solid #ddd; padding:10px; border-radius:6px;">
-                @foreach (var s in Model.AllStudents)
-                {
-                    var sid = long.Parse(s.Value);
-                    var isChecked = Model.SelectedStudentIds.Contains(sid);
-
-                    <div class="form-check">
-                        <input class="form-check-input"
-                               type="checkbox"
-                               name="SelectedStudentIds"
-                               value="@s.Value"
-                               @(isChecked ? "checked" : "") />
-                        <label class="form-check-label">@s.Text</label>
+        <!-- Right Column: Enrollments Period -->
+        <div class="col-lg-5">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white border-0 py-3">
+                    <h5 class="card-title mb-0 fw-semibold">
+                        <i class="fas fa-calendar-check me-2" style="color: var(--secondary-color);"></i>
+                        Enrollment Period Management
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="alert alert-info border-0 mb-4" style="background-color: rgba(16, 185, 129, 0.1);">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-info-circle me-2" style="color: var(--secondary-color);"></i>
+                            <div>
+                                <strong>Current Period:</strong>
+                                <span class="fw-bold">@Model.EnrollYear / @Model.EnrollSemester</span>
+                            </div>
+                        </div>
                     </div>
-                }
+
+                    <form asp-action="Edit" method="get" class="needs-validation" novalidate>
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-calendar me-1"></i>Select Year
+                            </label>
+                            <input class="form-control" 
+                                   name="year" 
+                                   value="@Model.EnrollYear" 
+                                   required
+                                   pattern="\d{4}"
+                                   placeholder="e.g., 2024" />
+                            <div class="invalid-feedback">
+                                Please enter a valid year (e.g., 2024)
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-snowflake me-1"></i>Select Semester
+                            </label>
+                            <select class="form-select" name="enrollSemester" required>
+                                <option value="Winter" selected="@(Model.EnrollSemester == "Winter")">
+                                    <i class="fas fa-snowflake me-1"></i>Winter Semester
+                                </option>
+                                <option value="Summer" selected="@(Model.EnrollSemester == "Summer")">
+                                    <i class="fas fa-sun me-1"></i>Summer Semester
+                                </option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-outline-primary w-100 py-2">
+                            <i class="fas fa-sync-alt me-2"></i>Load Enrollments for Selected Period
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 
-    <hr />
-    <h5>Enrollment details</h5>
+    <!-- Student Enrollment Management Section -->
+    <div class="row g-4 mt-3">
+        <!-- Enroll Students Card -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white border-0 py-3">
+                    <h5 class="card-title mb-0 fw-semibold">
+                        <i class="fas fa-user-plus me-2" style="color: var(--secondary-color);"></i>
+                        Enroll New Students
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <p class="text-muted mb-3">
+                        Select students to enroll in this course for the current period.
+                    </p>
 
-    <div class="table-responsive">
-        <table class="table table-striped align-middle">
-            <thead>
-                <tr>
-                    <th>Student</th>
-                    <th>Semester</th>
-                    <th>Year</th>
-                    <th>Grade</th>
-                    <th>Exam</th>
-                    <th>Seminar</th>
-                    <th>Project</th>
-                    <th>Add.</th>
-                    <th>Seminar URL</th>
-                    <th>Project URL</th>
-                    <th>Finish</th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (int i = 0; i < Model.EnrollmentRows.Count; i++)
-                {
-                    <tr>
-                        <td style="min-width:220px;">
-                            @Model.EnrollmentRows[i].StudentDisplay
+                    <form asp-action="EnrollStudents" method="post">
+                        @Html.AntiForgeryToken()
 
-                            <input type="hidden" asp-for="EnrollmentRows[i].Id" />
-                            <input type="hidden" asp-for="EnrollmentRows[i].StudentId" />
-                            <input type="hidden" asp-for="EnrollmentRows[i].StudentDisplay" />
-                        </td>
+                        <input type="hidden" name="courseId" value="@Model.Id" />
+                        <input type="hidden" name="enrollYear" value="@Model.EnrollYear" />
+                        <input type="hidden" name="enrollSemester" value="@Model.EnrollSemester" />
 
-                        <td style="min-width:120px;">
-                            <input class="form-control" asp-for="EnrollmentRows[i].Semester" />
-                        </td>
+                        <div class="student-list-container mb-4" 
+                             style="max-height: 320px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 8px; padding: 15px;">
+                            @if (Model.AllStudents.Any())
+                            {
+                                <div class="mb-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="selectAllStudents" />
+                                        <label class="form-check-label fw-semibold" for="selectAllStudents">
+                                            Select All Students
+                                        </label>
+                                    </div>
+                                </div>
+                                <hr class="my-2" />
 
-                        <td style="min-width:90px;">
-                            <input class="form-control" asp-for="EnrollmentRows[i].Year" />
-                        </td>
+                                @foreach (var s in Model.AllStudents)
+                                {
+                                    var sid = long.Parse(s.Value);
+                                    var isChecked = Model.SelectedStudentIds.Contains(sid);
 
-                        <td style="min-width:90px;">
-                            <input class="form-control" asp-for="EnrollmentRows[i].Grade" />
-                        </td>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input student-checkbox" 
+                                               type="checkbox" 
+                                               name="selectedStudentIds" 
+                                               value="@sid" 
+                                               @(isChecked ? "checked" : "") 
+                                               id="student_@sid" />
+                                        <label class="form-check-label" for="student_@sid">
+                                            <i class="fas fa-user-graduate me-2 text-muted"></i>
+                                            @s.Text
+                                        </label>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="text-center py-4">
+                                    <i class="fas fa-users-slash fa-2x text-muted mb-3"></i>
+                                    <p class="text-muted mb-0">No students available for enrollment</p>
+                                </div>
+                            }
+                        </div>
 
-                        <td style="min-width:90px;">
-                            <input class="form-control" asp-for="EnrollmentRows[i].ExamPoints" />
-                        </td>
+                        <button type="submit" class="btn btn-success w-100 py-2" @(Model.AllStudents.Any() ? "" : "disabled")>
+                            <i class="fas fa-user-check me-2"></i>
+                            Enroll Selected Students
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
 
-                        <td style="min-width:90px;">
-                            <input class="form-control" asp-for="EnrollmentRows[i].SeminarPoints" />
-                        </td>
+        <!-- Deactivate Students Card -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white border-0 py-3">
+                    <h5 class="card-title mb-0 fw-semibold">
+                        <i class="fas fa-user-minus me-2" style="color: #f59e0b;"></i>
+                        Manage Current Enrollments
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="DeactivateStudents" method="post">
+                        @Html.AntiForgeryToken()
 
-                        <td style="min-width:90px;">
-                            <input class="form-control" asp-for="EnrollmentRows[i].ProjectPoints" />
-                        </td>
+                        <input type="hidden" name="courseId" value="@Model.Id" />
+                        <input type="hidden" name="enrollYear" value="@Model.EnrollYear" />
+                        <input type="hidden" name="enrollSemester" value="@Model.EnrollSemester" />
 
-                        <td style="min-width:90px;">
-                            <input class="form-control" asp-for="EnrollmentRows[i].AdditionalPoints" />
-                        </td>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-calendar-times me-1"></i>Set Finish Date
+                            </label>
+                            <input class="form-control" 
+                                   type="date" 
+                                   name="finishDateForDeactivation" 
+                                   required
+                                   min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                            <small class="text-muted">Select the date when enrollment should end</small>
+                        </div>
 
-                        <td style="min-width:220px;">
-                            <input class="form-control" asp-for="EnrollmentRows[i].SeminarUrl" />
-                        </td>
+                        <div class="enrollment-table-container mb-4" 
+                             style="max-height: 250px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 8px;">
+                            @if (Model.CurrentEnrollments.Count > 0)
+                            {
+                                <table class="table table-hover mb-0">
+                                    <thead style="position: sticky; top: 0; background: white; z-index: 1;">
+                                        <tr>
+                                            <th style="width: 40px;">
+                                                <input class="form-check-input" type="checkbox" id="selectAllEnrollments" />
+                                            </th>
+                                            <th>Student</th>
+                                            <th style="width: 80px;" class="text-center">Grade</th>
+                                            <th style="width: 120px;">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var e in Model.CurrentEnrollments)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <input class="form-check-input enrollment-checkbox"
+                                                           type="checkbox"
+                                                           name="selectedEnrollmentIds"
+                                                           value="@e.Id" />
+                                                </td>
 
-                        <td style="min-width:220px;">
-                            <input class="form-control" asp-for="EnrollmentRows[i].ProjectUrl" />
-                        </td>
+                                                <td>
+                                                    <i class="fas fa-user-graduate me-2 text-muted"></i>
+                                                    @e.StudentDisplay
+                                                </td>
 
-                        <td style="min-width:140px;">
-                            <input class="form-control" type="date" asp-for="EnrollmentRows[i].FinishDate" />
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+                                                <!-- ✅ GRADE COLUMN -->
+                                                <td class="text-center">
+                                                    @if (e.Grade.HasValue)
+                                                    {
+                                                        <span class="badge bg-info text-dark fw-semibold">
+                                                            @e.Grade
+                                                        </span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="text-muted">-</span>
+                                                    }
+                                                </td>
+
+                                                <!-- STATUS -->
+                                                <td>
+                                                    @if (e.FinishDate.HasValue)
+                                                    {
+                                                        <span class="badge bg-warning text-dark">
+                                                            <i class="fas fa-calendar-times me-1"></i>
+                                                            @e.FinishDate.Value.ToString("yyyy-MM-dd")
+                                                        </span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="badge bg-success">
+                                                            <i class="fas fa-check-circle me-1"></i>
+                                                            Active
+                                                        </span>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                            else
+                            {
+                                <div class="text-center py-4">
+                                    <i class="fas fa-list-alt fa-2x text-muted mb-3"></i>
+                                    <p class="text-muted mb-0">No enrollments for this period</p>
+                                    <small class="text-muted">Change the period above to view enrollments</small>
+                                </div>
+                            }
+                        </div>
+
+                        <button type="submit" class="btn btn-warning w-100 py-2" @(Model.CurrentEnrollments.Count > 0 ? "" : "disabled")>
+                            <i class="fas fa-user-slash me-2"></i>
+                            Deactivate Selected Enrollments
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="mt-3">
-        <input type="submit" value="Save" class="btn btn-primary" />
-        <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
-    </div>
-</form>
+</div>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    
+    <script>
+        // Select all students functionality
+        document.getElementById('selectAllStudents')?.addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('.student-checkbox');
+            checkboxes.forEach(cb => cb.checked = this.checked);
+        });
+
+        // Select all enrollments functionality
+        document.getElementById('selectAllEnrollments')?.addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('.enrollment-checkbox');
+            checkboxes.forEach(cb => cb.checked = this.checked);
+        });
+
+        // Form validation
+        (function () {
+            'use strict'
+            const forms = document.querySelectorAll('.needs-validation')
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+
+        // Add some interactivity to checkboxes
+        document.querySelectorAll('.student-checkbox, .enrollment-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const container = this.closest('.form-check');
+                if (this.checked) {
+                    container.style.backgroundColor = 'rgba(16, 185, 129, 0.05)';
+                    container.style.borderRadius = '4px';
+                    container.style.padding = '2px 8px';
+                } else {
+                    container.style.backgroundColor = '';
+                }
+            });
+        });
+
+        // Set default finish date to today
+        const finishDateInput = document.querySelector('input[name="finishDateForDeactivation"]');
+        if (finishDateInput && !finishDateInput.value) {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            finishDateInput.value = tomorrow.toISOString().split('T')[0];
+        }
+    </script>
+
+    <style>
+        /* Custom styles for this page */
+        .student-list-container::-webkit-scrollbar,
+        .enrollment-table-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .student-list-container::-webkit-scrollbar-track,
+        .enrollment-table-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .student-list-container::-webkit-scrollbar-thumb,
+        .enrollment-table-container::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+
+        .student-list-container::-webkit-scrollbar-thumb:hover,
+        .enrollment-table-container::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(79, 70, 229, 0.15);
+        }
+
+        .card {
+            border-radius: 12px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .card-header {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: rgba(79, 70, 229, 0.03);
+        }
+
+        .badge {
+            font-size: 0.75em;
+            padding: 0.35em 0.65em;
+        }
+    </style>
 }
