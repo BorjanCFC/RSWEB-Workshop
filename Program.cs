@@ -41,6 +41,14 @@ app.MapControllerRoute(
 
 app.MapRazorPages();
 
+// Ensure database schema is up-to-date before seeding.
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await db.Database.MigrateAsync();
+}
+
+
 
 await SeedRolesAndUsersAsync(app);
 
@@ -67,5 +75,13 @@ static async Task SeedRolesAndUsersAsync(WebApplication app)
         await userManager.CreateAsync(admin, "Admin123!");
         await userManager.AddToRoleAsync(admin, "Admin");
     }
+    var user = await userManager.FindByEmailAsync("goranj@rsweb.com");
+
+    if (user != null)
+    {
+        var token = await userManager.GeneratePasswordResetTokenAsync(user);
+        await userManager.ResetPasswordAsync(user, token, "Goran123!");
+    }
+
 }
 

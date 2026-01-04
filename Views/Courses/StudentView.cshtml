@@ -9,29 +9,7 @@
         <div>
             <h2 class="fw-bold" style="color: var(--primary-color);">@Model.CourseTitle</h2>
         </div>
-
-        <form method="get" asp-action="StudentView" class="d-flex gap-2 align-items-center">
-            <input type="hidden" name="id" value="@Model.CourseId" />
-            <select name="year" class="form-select" style="max-width: 180px;">
-                @foreach (var y in Model.Years)
-                {
-                    <option value="@y" selected="@(y == Model.SelectedYear)">@y</option>
-                }
-            </select>
-            <button class="btn btn-outline-primary" type="submit">
-                <i class="fas fa-filter me-1"></i>Show
-            </button>
-        </form>
     </div>
-
-    @if (TempData["Success"] != null)
-    {
-        <div class="alert alert-success">@TempData["Success"]</div>
-    }
-    @if (TempData["Error"] != null)
-    {
-        <div class="alert alert-danger">@TempData["Error"]</div>
-    }
 
     <form asp-action="UpdateStudentEnrollment" method="post" enctype="multipart/form-data">
         @Html.AntiForgeryToken()

@@ -487,12 +487,12 @@ namespace Workshop1.Migrations
                     b.HasOne("Workshop1.Models.Teacher", "FirstTeacher")
                         .WithMany("FirstTeacherCourses")
                         .HasForeignKey("FirstTeacherId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Workshop1.Models.Teacher", "SecondTeacher")
                         .WithMany("SecondTeacherCourses")
                         .HasForeignKey("SecondTeacherId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("FirstTeacher");
 

@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace Workshop1.Migrations
 {
     /// <inheritdoc />
@@ -32,6 +30,8 @@ namespace Workshop1.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    TeacherId = table.Column<int>(type: "int", nullable: true),
+                    StudentId = table.Column<int>(type: "int", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -50,45 +50,6 @@ namespace Workshop1.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Students",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    StudentId = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    EnrollmentDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    AcquiredCredits = table.Column<int>(type: "int", nullable: true),
-                    CurrentSemester = table.Column<int>(type: "int", nullable: true),
-                    EducationLevel = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: true),
-                    ProfileImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Students", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Teachers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Degree = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    AcademicRank = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: true),
-                    OfficeNumber = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
-                    HireDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ProfileImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Teachers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -198,6 +159,57 @@ namespace Workshop1.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Students",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StudentId = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    EnrollmentDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    AcquiredCredits = table.Column<int>(type: "int", nullable: true),
+                    CurrentSemester = table.Column<int>(type: "int", nullable: true),
+                    EducationLevel = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: true),
+                    ProfileImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Students", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Students_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Teachers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Degree = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    AcademicRank = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: true),
+                    OfficeNumber = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
+                    HireDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ProfileImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Teachers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Teachers_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Courses",
                 columns: table => new
                 {
@@ -264,54 +276,6 @@ namespace Workshop1.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.InsertData(
-                table: "Students",
-                columns: new[] { "Id", "AcquiredCredits", "CurrentSemester", "EducationLevel", "EnrollmentDate", "FirstName", "LastName", "ProfileImagePath", "StudentId" },
-                values: new object[,]
-                {
-                    { 1L, null, 3, "Bachelor", new DateTime(2022, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Petar", "Nikolov", null, "201001" },
-                    { 2L, null, 3, "Bachelor", new DateTime(2022, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Marija", "Stankova", null, "201002" },
-                    { 3L, null, 5, "Bachelor", new DateTime(2021, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Jovan", "Trajkov", null, "201003" },
-                    { 4L, null, 5, "Bachelor", new DateTime(2021, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Sara", "Mihajlova", null, "201004" },
-                    { 5L, null, 6, "Bachelor", new DateTime(2020, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "David", "Kirilov", null, "201005" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Teachers",
-                columns: new[] { "Id", "AcademicRank", "Degree", "FirstName", "HireDate", "LastName", "OfficeNumber", "ProfileImagePath" },
-                values: new object[,]
-                {
-                    { 1, "Professor", "PhD", "Ivan", null, "Petrovski", "A101", null },
-                    { 2, "Assistant", "MSc", "Ana", null, "Stojanova", "B202", null },
-                    { 3, "Associate Professor", "PhD", "Marko", null, "Iliev", "A203", null },
-                    { 4, "Lecturer", "MSc", "Elena", null, "Kostova", "C104", null },
-                    { 5, "Professor", "PhD", "Stefan", null, "Dimitrov", "A105", null }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Courses",
-                columns: new[] { "Id", "Credits", "EducationLevel", "FirstTeacherId", "Programme", "SecondTeacherId", "Semester", "Title" },
-                values: new object[,]
-                {
-                    { 1, 6, "Undergraduate", 1, "IT", 2, 3, "Databases" },
-                    { 2, 6, "Undergraduate", 2, "IT", 3, 4, "Web Programming" },
-                    { 3, 7, "Undergraduate", 3, "SE", 5, 5, "Software Engineering" },
-                    { 4, 6, "Undergraduate", 4, "IT", 1, 4, "Computer Networks" },
-                    { 5, 7, "Undergraduate", 5, "SE", 4, 6, "Artificial Intelligence" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Enrollments",
-                columns: new[] { "Id", "AdditionalPoints", "CourseId", "ExamPoints", "FinishDate", "Grade", "ProjectPoints", "ProjectUrl", "Semester", "SeminarPoints", "SeminarUrl", "StudentId", "Year" },
-                values: new object[,]
-                {
-                    { 1L, null, 1, null, null, 8, null, null, "Winter", null, null, 1L, 2023 },
-                    { 2L, null, 2, null, null, 9, null, null, "Winter", null, null, 1L, 2023 },
-                    { 3L, null, 1, null, null, 7, null, null, "Winter", null, null, 2L, 2023 },
-                    { 4L, null, 3, null, null, 10, null, null, "Summer", null, null, 3L, 2024 },
-                    { 5L, null, 4, null, null, 8, null, null, "Summer", null, null, 4L, 2024 }
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -373,10 +337,24 @@ namespace Workshop1.Migrations
                 column: "StudentId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Students_ApplicationUserId",
+                table: "Students",
+                column: "ApplicationUserId",
+                unique: true,
+                filter: "[ApplicationUserId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Students_StudentId",
                 table: "Students",
                 column: "StudentId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Teachers_ApplicationUserId",
+                table: "Teachers",
+                column: "ApplicationUserId",
+                unique: true,
+                filter: "[ApplicationUserId] IS NOT NULL");
         }
 
         /// <inheritdoc />
@@ -404,9 +382,6 @@ namespace Workshop1.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
                 name: "Courses");
 
             migrationBuilder.DropTable(
@@ -414,6 +389,9 @@ namespace Workshop1.Migrations
 
             migrationBuilder.DropTable(
                 name: "Teachers");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }
