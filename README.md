@@ -69,41 +69,9 @@ Common folders you will find in the solution:
 - `wwwroot/` – static assets (CSS/JS/images)
 
 ---
-
-## Getting Started (Local Setup)
-
-### Prerequisites
-- **.NET SDK** (recommended: .NET 6/7/8 depending on what the solution targets)
-- Optional: Visual Studio 2022 / Rider / VS Code
-
-### Run the app
-1. Clone the repository
-2. Open the solution in your IDE
-3. Restore dependencies (usually automatic)
-4. Run the project:
-   - Visual Studio: **Run (IIS Express / Kestrel)**
-   - CLI:
-     ```bash
-     dotnet restore
-     dotnet run
-     ```
-
-The application will start and be available on a local URL (displayed in your console output).
-
----
-
 ## Database
 
 EDU Manage uses **SQLite** and **Entity Framework Core** for persistence.
-
-Typical steps (depending on how your repo is configured):
-- If migrations are included and database is not created:
-  ```bash
-  dotnet ef database update
-  ```
-- If the repository already includes a prebuilt `.db` file, you can run immediately.
-
-> If you want, tell me what your `appsettings.json` connection string looks like and I can tailor this section exactly to your setup.
 
 ---
 
@@ -132,28 +100,5 @@ Role-based behavior examples:
     - grade
     - completion date
     - active/inactive status
-
----
-
-## Screenshots
-
-You can include screenshots in the repo like this:
-
-```md
-![Home page](docs/screenshots/home.png)
-```
-
-Suggested screenshots to add:
-- Home/Landing page (EduManage Platform)
-- Admin: Students list + filters
-- Teacher: Course enrollments view (points/grade/status)
-- Student: My courses / results page
-
----
-
-## License
-
-Add your preferred license here (MIT, Apache-2.0, etc.).  
-If this is a university/course project, you can also state: “For educational purposes”.
 
 ---
