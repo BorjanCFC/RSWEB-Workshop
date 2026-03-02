@@ -3,25 +3,6 @@
 EDU Manage is a role-based education management web application built with **ASP.NET Core MVC**.  
 It helps academic institutions manage **students**, **teachers**, **courses**, and **enrollments**, while providing tailored functionality depending on the logged-in user’s role (**Admin / Teacher / Student**).
 
----
-
-## Table of Contents
-- [Overview](#overview)
-- [Key Features](#key-features)
-  - [Admin](#admin)
-  - [Teacher](#teacher)
-  - [Student](#student)
-- [Tech Stack](#tech-stack)
-- [Project Structure (High level)](#project-structure-high-level)
-- [Getting Started (Local Setup)](#getting-started-local-setup)
-- [Database](#database)
-- [Authentication & Roles](#authentication--roles)
-- [Usage Notes](#usage-notes)
-- [Screenshots](#screenshots)
-- [License](#license)
-
----
-
 ## Overview
 
 EDU Manage is designed to centralize the most common academic workflows:
@@ -45,8 +26,6 @@ Admins have full control over the system and can:
 - Manage enrollments (add/remove students from courses)
 - Filter/search entities in the UI (students/courses lists)
 
-> Admin views typically expose the full dataset and full CRUD operations.
-
 ### Teacher
 Teachers can:
 - View only the courses they teach (first or second teacher assignment)
@@ -61,15 +40,11 @@ Teachers can:
   - active/inactive status
 - Access course student lists in a dedicated teacher view
 
-> Inactive enrollments are typically treated as locked/disabled for editing.
-
 ### Student
 Students can:
 - View only the courses they are enrolled in
 - See their enrollment status and results (points/grade/completion date)
 - View course-related links (e.g., seminar/project URL) depending on what the system allows for students
-
-> Student permissions focus on read-only access to their own data.
 
 ---
 
